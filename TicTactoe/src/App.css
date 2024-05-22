@@ -30,7 +30,7 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 30px;
+  margin-top: 20px;
   color: white;
   background-color: black;
 }
@@ -39,4 +39,9 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.playAgain {
+  display: flex;
+  justify-content: center;
 }
