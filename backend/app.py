@@ -16,7 +16,7 @@ def get_move():
     # 3x3 2d array with 'X', 'O', ' '(SPACE)s
     board = request.get_json()
     t = TTTProblem(3, board, 1)
-    action = minimax(t) #(row, col)
+    action = minimax(t) #(row, col
 
     return action
  
