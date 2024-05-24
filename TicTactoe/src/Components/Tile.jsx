@@ -1,8 +1,13 @@
-function Tile({ value, onClick }) {
+function Tile({ value, onClick, highlight }) {
+  let className = "tile";
+  if (highlight) {
+    className += " highlight";
+  }
+
   return (
-    <div onClick={onClick} className="tile">
+    <button className={className} onClick={onClick}>
       {value}
-    </div>
+    </button>
   );
 }
 

@@ -18,12 +18,12 @@ h1 {
 }
 
 .tile {
-  color: azure;
   font-size: 2em;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 2px dotted blue;
+  border: 2px solid black;
+  color: blue;
 }
 
 .reset {
@@ -44,4 +44,8 @@ h1 {
 .playAgain {
   display: flex;
   justify-content: center;
+}
+
+.tile.highlight {
+  background-color: yellow; /* or any color you prefer */
 }

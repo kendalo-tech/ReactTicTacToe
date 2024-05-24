@@ -12,6 +12,7 @@ function TicTacToe() {
   const [playerTurn, setPlayerTurn] = useState(playerX);
   const [winner, setWinner] = useState(null);
   const [draw, setDraw] = useState(false);
+  const [winLight, setWinLight] = useState(null);
 
   const checkWinner = (tiles) => {
     const combo = [
@@ -28,7 +29,7 @@ function TicTacToe() {
     for (let comb of combo) {
       const [a, b, c] = comb;
       if (tiles[a] && tiles[a] === tiles[b] && tiles[a] === tiles[c]) {
-        return tiles[a]; //return winner
+        return { winner: tiles[a], comb }; //return winner
       }
     }
 
@@ -44,6 +45,7 @@ function TicTacToe() {
     setPlayerTurn(playerX);
     setWinner(null);
     setDraw(false);
+    setWinLight(null);
   };
 
   const TileClick = (index) => {
@@ -57,7 +59,8 @@ function TicTacToe() {
 
     const gameWinner = checkWinner(newTiles);
     if (gameWinner) {
-      setWinner(gameWinner);
+      setWinner(gameWinner.winner);
+      setWinLight(gameWinner.comb);
     } else if (checkDraw(newTiles)) {
       setDraw(true);
       //console.log("draw");
@@ -73,7 +76,7 @@ function TicTacToe() {
   return (
     <div>
       <h1>Tic Tac Toe</h1>
-      <Board tiles={tiles} OnTileClick={TileClick} />
+      <Board tiles={tiles} OnTileClick={TileClick} winLight={winLight} />
       <div className="playAgain">
         {winner && <p>{`Player ${winner} wins! Press reset to play again!`}</p>}
         {draw && <p>The game is a draw! Press reset to play again!</p>}
