@@ -68,9 +68,10 @@ function TicTacToe() {
     }
 
     if (!gameWinner && !draw && vsAI) {
-      setTimeout(async () => {
-        await aiMove(newTiles);
-      }, 500);
+      // setTimeout(async () => {
+      //   await aiMove(newTiles);
+      // }, 500);
+      aiMove(newTiles)
     }
 
     if (playerTurn === playerX) {
@@ -85,21 +86,49 @@ function TicTacToe() {
     setVsAi(!vsAI);
   };
 
-  const aiMove = async (currentTiles) => {
-    const response = await fetch("http://localhost:5000/next-move", {
-      method: "POST",
-      mode: "no-cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: currentTiles,
+  // const aiMove = async (currentTiles) => {
+  //   const response = await fetch("http://127.0.0.1:5000/next-move", {
+  //     method: "POST",
+  //     // mode: "no-cors",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: currentTiles,
+  //   });
+  //   const data = await response.json();
+  //   const { row, col } = data;
+  //   const aiIndex = row * 3 + col;
+  //   console.log(aiIndex);
+  //   TileClick(aiIndex);
+  // };
+
+  const aiMove = (company) => {
+    console.log("test")
+    fetch('http://127.0.0.1:5000/next-move', {
+        method: "POST", 
+        // mode: "no-cors",
+        headers: {
+            'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify({company: company})
+    }).then(res => res.json()).then(data => {
+        console.log(data)
+        const row = data[0]
+        const col = data[1]
+        const aiIndex = row * 3 + col;
+        console.log(aiIndex);
+        TileClick(aiIndex);
+        return data
     });
-    const data = await response.json();
-    const { row, col } = data;
-    const aiIndex = row * 3 + col;
-    console.log(aiIndex);
-    TileClick(aiIndex);
-  };
+}
+
+//   const aiMove = (board) => {
+//     console.log("test")
+//     fetch('http://localhost:5000/test')
+//     .then(response => response.json())
+//     .then(data => console.log(data))
+//     .catch(error => console.error('Error fetching data:', error))
+// }
 
   return (
     <div>
