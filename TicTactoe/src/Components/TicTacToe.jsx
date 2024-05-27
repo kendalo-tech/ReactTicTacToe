@@ -50,7 +50,11 @@ function TicTacToe() {
   };
 
   const TileClick = (index) => {
-    if (tiles[index] !== null || winner !== null) {
+    if (
+      tiles[index] !== null ||
+      winner !== null ||
+      (vsAI && playerTurn === playerO)
+    ) {
       return;
     }
 
@@ -62,20 +66,19 @@ function TicTacToe() {
     if (gameWinner) {
       setWinner(gameWinner.winner);
       setWinLight(gameWinner.comb);
+      return;
     } else if (checkDraw(newTiles)) {
       setDraw(true);
+      return;
       //console.log("draw");
-    }
-
-    if (!gameWinner && !draw && vsAI) {
-      // setTimeout(async () => {
-      //   await aiMove(newTiles);
-      // }, 500);
-      aiMove(newTiles)
     }
 
     if (playerTurn === playerX) {
       setPlayerTurn(playerO);
+      console.log("Player turn" + playerTurn);
+      if (vsAI) {
+        setTimeout(() => aiMove(newTiles), 500);
+      }
     } else {
       setPlayerTurn(playerX);
     }
@@ -103,32 +106,56 @@ function TicTacToe() {
   // };
 
   const aiMove = (company) => {
-    console.log("test")
-    fetch('http://127.0.0.1:5000/next-move', {
-        method: "POST", 
-        // mode: "no-cors",
-        headers: {
-            'Content-Type' : 'application/json'
-        },
-        body: JSON.stringify({company: company})
-    }).then(res => res.json()).then(data => {
-        console.log(data)
-        const row = data[0]
-        const col = data[1]
+    console.log("test");
+    fetch("http://127.0.0.1:5000/next-move", {
+      method: "POST",
+      // mode: "no-cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ company: company }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        const row = data[0];
+        const col = data[1];
         const aiIndex = row * 3 + col;
         console.log(aiIndex);
-        TileClick(aiIndex);
-        return data
-    });
-}
+        makeAiMove(aiIndex, company);
+        return data;
+      });
+  };
 
-//   const aiMove = (board) => {
-//     console.log("test")
-//     fetch('http://localhost:5000/test')
-//     .then(response => response.json())
-//     .then(data => console.log(data))
-//     .catch(error => console.error('Error fetching data:', error))
-// }
+  const makeAiMove = (index, tiles) => {
+    if (tiles[index] !== null || winner !== null) {
+      return;
+    }
+
+    const newTiles = [...tiles];
+    newTiles[index] = playerO; // AI is always player O
+    setTiles(newTiles);
+
+    const gameWinner = checkWinner(newTiles);
+    if (gameWinner) {
+      setWinner(gameWinner.winner);
+      setWinLight(gameWinner.comb);
+      return;
+    } else if (checkDraw(newTiles)) {
+      setDraw(true);
+      return;
+    }
+
+    setPlayerTurn(playerX); // Switch turn back to player X
+  };
+
+  //   const aiMove = (board) => {
+  //     console.log("test")
+  //     fetch('http://localhost:5000/test')
+  //     .then(response => response.json())
+  //     .then(data => console.log(data))
+  //     .catch(error => console.error('Error fetching data:', error))
+  // }
 
   return (
     <div>
