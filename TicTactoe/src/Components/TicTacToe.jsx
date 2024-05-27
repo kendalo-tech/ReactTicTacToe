@@ -13,6 +13,7 @@ function TicTacToe() {
   const [winner, setWinner] = useState(null);
   const [draw, setDraw] = useState(false);
   const [winLight, setWinLight] = useState(null);
+  const [vsAI, setVsAi] = useState(null);
 
   const checkWinner = (tiles) => {
     const combo = [
@@ -66,11 +67,38 @@ function TicTacToe() {
       //console.log("draw");
     }
 
+    if (!gameWinner && !draw && vsAI) {
+      setTimeout(async () => {
+        await aiMove(newTiles);
+      }, 500);
+    }
+
     if (playerTurn === playerX) {
       setPlayerTurn(playerO);
     } else {
       setPlayerTurn(playerX);
     }
+  };
+
+  const toggleGameMode = () => {
+    resetGame();
+    setVsAi(!vsAI);
+  };
+
+  const aiMove = async (currentTiles) => {
+    const response = await fetch("http://localhost:5000/next-move", {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: currentTiles,
+    });
+    const data = await response.json();
+    const { row, col } = data;
+    const aiIndex = row * 3 + col;
+    console.log(aiIndex);
+    TileClick(aiIndex);
   };
 
   return (
@@ -81,6 +109,9 @@ function TicTacToe() {
         {winner && <p>{`Player ${winner} wins! Press reset to play again!`}</p>}
         {draw && <p>The game is a draw! Press reset to play again!</p>}
       </div>
+      <button className="switchButton" onClick={toggleGameMode}>
+        {vsAI ? "Switch to Player vs Player" : "Switch to Player vs AI"}
+      </button>
       <ResetButton onReset={resetGame} />
     </div>
   );
