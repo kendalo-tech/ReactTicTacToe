@@ -49,3 +49,11 @@ h1 {
 .tile.highlight {
   background-color: yellow; /* or any color you prefer */
 }
+
+.switchButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  margin-top: 10px;
+}
